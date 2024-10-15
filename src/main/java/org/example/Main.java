@@ -1,42 +1,28 @@
 package org.example;
 
-import org.example.components.ChangeThemePanel;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
+import org.example.managements.AuthManagement;
+import org.example.screens.dashboard.DashboardFrame;
+import org.example.screens.login.LoginFrame;
 import org.example.themes.CustomTheme_Dark;
 
-import javax.swing.*;
-import java.awt.*;
-
-public class Main extends JFrame {
-    static int WIDTH = 500;
-    static int HEIGHT = 500;
-
-    public Main() {
-        super();
-        init();
-    }
-
-    public Main(String title) {
-        super(title);
-        init();
-    }
-
-    public void init() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(new Dimension(Main.WIDTH, Main.HEIGHT));
-
-        initComponents();
-
-        setVisible(true);
-    }
-
-    public void initComponents() {
-        add(new ChangeThemePanel());
-    }
+public class Main {
 
     public static void main(String[] args) {
+        FlatRobotoFont.install();
+        FlatLaf.registerCustomDefaultsSource("themes");
         CustomTheme_Dark.setup();
 
-        Main application = new Main("Example Application");
+        //Main application = new Main("Example Application");
+        String token = AuthManagement.getToken();
+        if (AuthManagement.isTokenValid(token)) {
+            // Si el token es válido, abre directamente el Dashboard
+            new DashboardFrame();
+        } else {
+            // Si no hay token válido, muestra la ventana de Login
+            new LoginFrame();
+        }
 
     }
 }
